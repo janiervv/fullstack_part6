@@ -22,6 +22,7 @@ const likeReducer = (state = [], action) => {
 
 
 export const addLike = (id) => {
+  console.log("tulee tänne " + id)
   return async dispatch => {
     const anecdotes = await anecdoteService.AddLikeToAnecdote(id)
     dispatch({

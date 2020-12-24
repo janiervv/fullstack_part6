@@ -1,30 +1,41 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux' 
 import { addLike } from '../reducers/anecdoteReducer'
 
 
-const AnecdoteList = () => {
-
-    const anecdotes = useSelector(state => state)
-    const dispatch = useDispatch()
+const AnecdoteList = (props) => {
 
 return(
     <div>
 
-      {anecdotes.map(anecdote =>
+      {props.anecdotesToShow.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => dispatch(addLike(anecdote.id))}>Vote</button>
+            <button onClick={() => props.addLike(anecdote.id)}>Vote</button>
           </div>
         </div>
       )}
-    </div>
-)
-
+      </div>
+      )
 }
 
-export default AnecdoteList
+const anecdotesToShow = (anecdotes) => {
+  return anecdotes.sort((a, b) => b.votes - a.votes)
+} 
+
+const mapStateToProps = (state) => {
+  return {
+    anecdotesToShow: anecdotesToShow(state)
+  }
+}
+
+const mapDispatchToProps = {
+  addLike
+}
+
+const ConnectedAnecdotes = connect(mapStateToProps, mapDispatchToProps)(AnecdoteList)
+export default ConnectedAnecdotes
